@@ -7,6 +7,7 @@ using PKHeX.Drawing.PokeSprite;
 using Newtonsoft.Json;
 using System.Text;
 using PokeViewer.NET.Properties;
+using PokeViewer.NET.Extensions;
 
 namespace PokeViewer.NET.SubForms
 {
@@ -48,10 +49,8 @@ namespace PokeViewer.NET.SubForms
             if (EatOnStart.Checked)
             {
                 await MakeSandwich(token).ConfigureAwait(false);
-                await WaitForEggs(token).ConfigureAwait(false);
-            }
-            else
-                await WaitForEggs(token).ConfigureAwait(false);
+            }    
+            await WaitForEggs(token).ConfigureAwait(false);
         }
 
         private async Task WaitForEggs(CancellationToken token)
@@ -65,7 +64,7 @@ namespace PokeViewer.NET.SubForms
                 var waiting = 0;                
                 while (DateTime.Now < endTime)
                 {
-                    NextSanwichLabel.Text = $"Next Sandwich: {endTime:hh\\:mm\\:ss}";
+                    this.PerformSafely(() => NextSanwichLabel.Text = $"Next Sandwich: {endTime:hh\\:mm\\:ss}");
                     var pk = await ReadPokemonSV(EggData, 344, token).ConfigureAwait(false);
                     while (pkprev.EncryptionConstant == pk.EncryptionConstant || pk == null || (Species)pk.Species == Species.None)
                     {
@@ -89,7 +88,7 @@ namespace PokeViewer.NET.SubForms
                         waiting = 0;
                         ctr++;
                         eggcount++;
-                        BasketCount.Text = $"Basket Count: {ctr}";
+                        this.PerformSafely(() => BasketCount.Text = $"Basket Count: {ctr}");
                         string pid = $"{Environment.NewLine}PID: {pk.PID:X8}";
                         string ec = $"{Environment.NewLine}EC: {pk.EncryptionConstant:X8}";
                         var form = FormOutput(pk.Species, pk.Form, out _);
@@ -101,7 +100,7 @@ namespace PokeViewer.NET.SubForms
                             case 2: break;
                         }
                         string output = $"{$"Egg #{eggcount}"}{Environment.NewLine}{(pk.ShinyXor == 0 ? "■ - " : pk.ShinyXor <= 16 ? "★ - " : "")}{(Species)pk.Species}{form}{gender}{pid}{ec}{Environment.NewLine}Nature: {(Nature)pk.Nature}{Environment.NewLine}Ability: {(Ability)pk.Ability}{Environment.NewLine}IVs: {pk.IV_HP}/{pk.IV_ATK}/{pk.IV_DEF}/{pk.IV_SPA}/{pk.IV_SPD}/{pk.IV_SPE}";
-                        PokeStats.Text = output;
+                        this.PerformSafely(() => PokeStats.Text = output);
                         var sprite = PokeImg(pk, false);
                         PokeSpriteBox.Load(sprite);
                         var ballsprite = SpriteUtil.GetBallSprite(pk.Ball);
@@ -111,7 +110,7 @@ namespace PokeViewer.NET.SubForms
                         if (pk.IsShiny)
                         {
                             shinycount++;
-                            ShinyFoundLabel.Text = $"Shinies Found: {shinycount}";
+                            this.PerformSafely(() => ShinyFoundLabel.Text = $"Shinies Found: {shinycount}");
                         }
 
                         if (pk.IsShiny && (Species)pk.Species != Species.None && StopOnShiny.Checked)
@@ -139,15 +138,41 @@ namespace PokeViewer.NET.SubForms
                             return;
                         }
 
+                        if (!string.IsNullOrEmpty(IVSpreadTextBox.Text))
+                        {
+                            var targetSpread = IVSpreadTextBox.Text.Split('/');
+                            var ivMatch = true;
+                            for(int index = 0; index < 6; index++)
+                            {
+                                if (targetSpread[index].Equals("x", StringComparison.OrdinalIgnoreCase) || targetSpread[index].Equals("xx", StringComparison.OrdinalIgnoreCase))
+                                    continue;
+                                if (int.TryParse(targetSpread[index], out var target) && target == pk.IVs[index])
+                                    continue;
+                                ivMatch = false;
+                                break;
+                            }
+
+                            if (ivMatch)
+                            {
+                                await Click(HOME, 0_500, token).ConfigureAwait(false);
+                                SendNotifications(output, sprite);
+                                EnableOptions();
+                                WindowState = _WindowState;
+                                Activate();
+                                MessageBox.Show("Match found!");
+                                return;
+                            }
+                        }
+
                         pkprev = pk;                        
                     }
                     if (ctr == 10)
                     {
-                        BasketCount.Text = $"Resetting..";
+                        this.PerformSafely(() => BasketCount.Text = $"Resetting..");
                         await ReopenPicnic(token).ConfigureAwait(false);
                         ctr = 0;
                         waiting = 0;
-                        BasketCount.Text = $"Basket Count: {ctr}";
+                        this.PerformSafely(() => BasketCount.Text = $"Basket Count: {ctr}");
                     }
                 }
                 await MakeSandwich(token).ConfigureAwait(false);
@@ -287,7 +312,7 @@ namespace PokeViewer.NET.SubForms
             }
 
             sandwichcount++;
-            SandwichCount.Text = $"Sandwiches Made: {sandwichcount}";
+            this.PerformSafely(() => SandwichCount.Text = $"Sandwiches Made: {sandwichcount}");
             for (int i = 0; i < 5; i++)
                 await Click(A, 0_800, token).ConfigureAwait(false);
 
@@ -358,6 +383,7 @@ namespace PokeViewer.NET.SubForms
             checkBox7.Enabled = false;
             FillingHoldTime.Enabled = false;
             NumberOfFillings.Enabled = false;
+            IVSpreadTextBox.Enabled = false;
         }
 
         private void EnableOptions()
@@ -371,6 +397,7 @@ namespace PokeViewer.NET.SubForms
             checkBox7.Enabled = true;
             FillingHoldTime.Enabled = true;
             NumberOfFillings.Enabled = true;
+            IVSpreadTextBox.Enabled = true;
         }
 
         private static HttpClient? _client;
