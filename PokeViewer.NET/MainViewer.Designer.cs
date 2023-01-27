@@ -281,6 +281,7 @@
             this.BoxViewer.UseVisualStyleBackColor = true;
             this.BoxViewer.Visible = false;
             this.BoxViewer.Click += new System.EventHandler(this.BoxView_Click);
+            this.BoxViewer.Enabled = false;
             // 
             // TrainerView
             // 
@@ -335,6 +336,7 @@
             this.Raids.UseVisualStyleBackColor = true;
             this.Raids.Visible = false;
             this.Raids.Click += new System.EventHandler(this.Raids_Click);
+            this.Raids.Enabled = false;
             // 
             // MainViewer
             // 
