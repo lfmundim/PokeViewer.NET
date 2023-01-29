@@ -1,8 +1,10 @@
+using PokeViewer.NET.SubForms;
+
 namespace PokeViewer.NET
 {
     static class Program
     {
-        public static MainViewer? Viewer;
+        public static Egg_Viewer? Viewer;
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -11,7 +13,7 @@ namespace PokeViewer.NET
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Viewer = new MainViewer();
+            Viewer = new Egg_Viewer();
             Application.Run(Viewer);
         }
     }

@@ -844,5 +844,10 @@ namespace PokeViewer.NET
             using RaidCodeEntry WideForm = new();
             WideForm.ShowDialog();
         }
+
+        private void OriginIcon_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

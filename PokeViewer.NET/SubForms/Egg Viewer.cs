@@ -8,18 +8,19 @@ using Newtonsoft.Json;
 using System.Text;
 using PokeViewer.NET.Properties;
 using PokeViewer.NET.Extensions;
+using System.Net.Sockets;
 
 namespace PokeViewer.NET.SubForms
 {
     public partial class Egg_Viewer : Form
     {
-        private readonly static SwitchConnectionConfig Config = new() { Protocol = SwitchProtocol.WiFi, IP = Properties.Settings.Default.SwitchIP, Port = 6000 };
+        private readonly static SwitchConnectionConfig Config = new() { Protocol = SwitchProtocol.WiFi, IP = Settings.Default.SwitchIP, Port = 6000 };
         public SwitchSocketAsync SwitchConnection = new(Config);
         private readonly FormWindowState _WindowState;
         public Egg_Viewer()
         {
             InitializeComponent();
-            SwitchConnection.Connect();
+            //SwitchConnection.Connect();
         }
         private int eggcount = 0;
         private int sandwichcount = 0;
@@ -27,6 +28,9 @@ namespace PokeViewer.NET.SubForms
         private readonly uint EggData = 0x04386040;
         private readonly uint PicnicMenu = 0x04416020;
         private readonly byte[] BlankVal = { 0x01 };
+        private const string VioletID = "01008F6008C5E000";
+        private const string ScarletID = "0100A3D008C5C000";
+        private int GameType;
         public IReadOnlyList<long> OverworldPointer { get; } = new long[] { 0x43A7848, 0x348, 0x10, 0xD8, 0x28 };
         private ulong OverworldOffset;
 
@@ -48,9 +52,9 @@ namespace PokeViewer.NET.SubForms
 
             if (EatOnStart.Checked)
             {
-                await MakeSandwich(token).ConfigureAwait(false);
+                ActiveForm.PerformSafely(async () => await MakeSandwich(token).ConfigureAwait(false));
             }    
-            await WaitForEggs(token).ConfigureAwait(false);
+            ActiveForm.PerformSafely(async () => await WaitForEggs(token).ConfigureAwait(false));
         }
 
         private async Task WaitForEggs(CancellationToken token)
@@ -64,7 +68,7 @@ namespace PokeViewer.NET.SubForms
                 var waiting = 0;                
                 while (DateTime.Now < endTime)
                 {
-                    this.PerformSafely(() => NextSanwichLabel.Text = $"Next Sandwich: {endTime:hh\\:mm\\:ss}");
+                    ActiveForm.PerformSafely(() => NextSanwichLabel.Text = $"Next Sandwich: {endTime:hh\\:mm\\:ss}");
                     var pk = await ReadPokemonSV(EggData, 344, token).ConfigureAwait(false);
                     while (pkprev.EncryptionConstant == pk.EncryptionConstant || pk == null || (Species)pk.Species == Species.None)
                     {
@@ -88,7 +92,7 @@ namespace PokeViewer.NET.SubForms
                         waiting = 0;
                         ctr++;
                         eggcount++;
-                        this.PerformSafely(() => BasketCount.Text = $"Basket Count: {ctr}");
+                        ActiveForm.PerformSafely(() => BasketCount.Text = $"Basket Count: {ctr}");
                         string pid = $"{Environment.NewLine}PID: {pk.PID:X8}";
                         string ec = $"{Environment.NewLine}EC: {pk.EncryptionConstant:X8}";
                         var form = FormOutput(pk.Species, pk.Form, out _);
@@ -100,7 +104,7 @@ namespace PokeViewer.NET.SubForms
                             case 2: break;
                         }
                         string output = $"{$"Egg #{eggcount}"}{Environment.NewLine}{(pk.ShinyXor == 0 ? "■ - " : pk.ShinyXor <= 16 ? "★ - " : "")}{(Species)pk.Species}{form}{gender}{pid}{ec}{Environment.NewLine}Nature: {(Nature)pk.Nature}{Environment.NewLine}Ability: {(Ability)pk.Ability}{Environment.NewLine}IVs: {pk.IV_HP}/{pk.IV_ATK}/{pk.IV_DEF}/{pk.IV_SPA}/{pk.IV_SPD}/{pk.IV_SPE}";
-                        this.PerformSafely(() => PokeStats.Text = output);
+                        ActiveForm.PerformSafely(() => PokeStats.Text = output);
                         var sprite = PokeImg(pk, false);
                         PokeSpriteBox.Load(sprite);
                         var ballsprite = SpriteUtil.GetBallSprite(pk.Ball);
@@ -110,10 +114,10 @@ namespace PokeViewer.NET.SubForms
                         if (pk.IsShiny)
                         {
                             shinycount++;
-                            this.PerformSafely(() => ShinyFoundLabel.Text = $"Shinies Found: {shinycount}");
+                            ActiveForm.PerformSafely(() => ShinyFoundLabel.Text = $"Shinies Found: {shinycount}");
                         }
 
-                        if (pk.IsShiny && (Species)pk.Species != Species.None && StopOnShiny.Checked)
+                        if ((pk.IsShiny && (Species)pk.Species != Species.None && StopOnShiny.Checked) || CheckMatchingIVs(pk))
                         {                            
                             if ((Species)pk.Species is Species.Dunsparce or Species.Tandemaus && pk.EncryptionConstant % 100 != 0 && CheckBoxOf3.Checked)
                                 break;
@@ -122,57 +126,31 @@ namespace PokeViewer.NET.SubForms
                             {
                                 await Click(HOME, 0_500, token).ConfigureAwait(false);
                                 SendNotifications(output, sprite);
-                                EnableOptions();
-                                WindowState = _WindowState;
-                                Activate();
-                                MessageBox.Show("Rare Shiny Found!");                                
+                                ActiveForm.PerformSafely(() => EnableOptions());
+                                ActiveForm.PerformSafely(() => WindowState = _WindowState);
+                                ActiveForm.PerformSafely(() => Activate());
+                                MessageBox.Show("Rare Shiny Found!");
                                 return;
                             }
 
                             await Click(HOME, 0_500, token).ConfigureAwait(false);
                             SendNotifications(output, sprite);
-                            EnableOptions();
-                            WindowState = _WindowState;
-                            Activate();
+                            ActiveForm.PerformSafely(() => EnableOptions());
+                            ActiveForm.PerformSafely(() => WindowState = _WindowState);
+                            ActiveForm.PerformSafely(() => Activate());
                             MessageBox.Show("Match found!");
                             return;
-                        }
-
-                        if (!string.IsNullOrEmpty(IVSpreadTextBox.Text))
-                        {
-                            var targetSpread = IVSpreadTextBox.Text.Split('/');
-                            var ivMatch = true;
-                            for(int index = 0; index < 6; index++)
-                            {
-                                if (targetSpread[index].Equals("x", StringComparison.OrdinalIgnoreCase) || targetSpread[index].Equals("xx", StringComparison.OrdinalIgnoreCase))
-                                    continue;
-                                if (int.TryParse(targetSpread[index], out var target) && target == pk.IVs[index])
-                                    continue;
-                                ivMatch = false;
-                                break;
-                            }
-
-                            if (ivMatch)
-                            {
-                                await Click(HOME, 0_500, token).ConfigureAwait(false);
-                                SendNotifications(output, sprite);
-                                EnableOptions();
-                                WindowState = _WindowState;
-                                Activate();
-                                MessageBox.Show("Match found!");
-                                return;
-                            }
                         }
 
                         pkprev = pk;                        
                     }
                     if (ctr == 10)
                     {
-                        this.PerformSafely(() => BasketCount.Text = $"Resetting..");
+                        ActiveForm.PerformSafely(() => BasketCount.Text = $"Resetting..");
                         await ReopenPicnic(token).ConfigureAwait(false);
                         ctr = 0;
                         waiting = 0;
-                        this.PerformSafely(() => BasketCount.Text = $"Basket Count: {ctr}");
+                        ActiveForm.PerformSafely(() => BasketCount.Text = $"Basket Count: {ctr}");
                     }
                 }
                 await MakeSandwich(token).ConfigureAwait(false);
@@ -190,6 +168,22 @@ namespace PokeViewer.NET.SubForms
             var cmd = SwitchCommand.SetStick(stick, x, y, true);
             await SwitchConnection.SendAsync(cmd, token).ConfigureAwait(false);
             await Task.Delay(delay, token).ConfigureAwait(false);
+        }
+
+        private bool CheckMatchingIVs(PK9 pk)
+        {
+            if (string.IsNullOrWhiteSpace(IVSpreadTextBox.Text))
+                return false;
+            var targetStrings = IVSpreadTextBox.Text.Split('/');
+            var sortedIVs = new List<int> { pk.IV_HP, pk.IV_ATK, pk.IV_DEF, pk.IV_SPA, pk.IV_SPD, pk.IV_SPE };
+
+            for(int i = 0; i < targetStrings.Length; i++)
+            {
+                var isInt = int.TryParse(targetStrings[i], out var value);
+                if (!isInt || sortedIVs[i] == value) continue;
+                return false;
+            }
+            return true;
         }
 
         private async Task ReopenPicnic(CancellationToken token)
@@ -312,7 +306,7 @@ namespace PokeViewer.NET.SubForms
             }
 
             sandwichcount++;
-            this.PerformSafely(() => SandwichCount.Text = $"Sandwiches Made: {sandwichcount}");
+            ActiveForm.PerformSafely(() => SandwichCount.Text = $"Sandwiches Made: {sandwichcount}");
             for (int i = 0; i < 5; i++)
                 await Click(A, 0_800, token).ConfigureAwait(false);
 
@@ -418,7 +412,7 @@ namespace PokeViewer.NET.SubForms
             if (string.IsNullOrEmpty(results))
                 return;
             DiscordWebhooks = WebHookText.Text.Split(',');
-            if (DiscordWebhooks == null)
+            if (DiscordWebhooks == null || !DiscordWebhooks.Any(w => !string.IsNullOrEmpty(w)))
                 return;
             var webhook = GenerateWebhook(results, thumbnail);
             var content = new StringContent(JsonConvert.SerializeObject(webhook), Encoding.UTF8, "application/json");
@@ -479,6 +473,139 @@ namespace PokeViewer.NET.SubForms
             Graphics G = Graphics.FromImage(FormScreenShot);
             G.CopyFromScreen(Location, new Point(0, 0), Size);
             Clipboard.SetImage(FormScreenShot);
+        }
+
+        private void SwitchIP_TextChanged(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (textBox.Text != "192.168.0.0")
+            {
+                Properties.Settings.Default.SwitchIP = textBox.Text;
+                Config.IP = SwitchIP.Text;
+            }
+            Properties.Settings.Default.Save();
+        }
+
+        private void HidePIDEC_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            if (checkBox.Checked == true)
+            {
+                Settings.Default.HidePIDEC = HidePIDEC.Checked;
+                HidePIDEC.Checked = true;
+            }
+            else
+            {
+                Settings.Default.HidePIDEC = false;
+                HidePIDEC.Checked = false;
+            }
+            Settings.Default.Save();
+        }
+
+        private void Connect_Click(object sender, EventArgs e)
+        {
+            if (!SwitchConnection.Connected)
+            {
+                try
+                {
+                    SwitchConnection.Connect();
+                    ActiveForm.PerformSafely(() => FetchButton.Enabled = true);
+                    Connect.Text = "Disconnect";
+                    SwitchIP.Enabled = false;
+                    InGameScreenshot.Visible = true;
+                    HidePIDEC.Visible = true;
+                    Window_Loaded();
+                }
+                catch (SocketException err)
+                {
+                    MessageBox.Show(err.Message);
+                    MessageBox.Show($"{Environment.NewLine}Ensure IP address is correct before connecting!");
+                }
+            }
+            else if (SwitchConnection.Connected)
+            {
+                SwitchConnection.Disconnect();
+                SwitchConnection.Reset();
+                Connect.Text = "Connect";
+                SwitchIP.Enabled = true;
+                InGameScreenshot.Visible = false;
+                HidePIDEC.Visible = false;
+                string url = "https://raw.githubusercontent.com/zyro670/PokeTextures/main/OriginMarks/icon_generation_00%5Esb.png";
+                OriginIcon.ImageLocation = url;
+                SwitchConnection.Reset();
+                this.Close();
+                Application.Restart();
+            }
+        }
+
+        private void Window_Loaded()
+        {
+            var token = CancellationToken.None;
+            int type = 0;
+            string url = "https://raw.githubusercontent.com/zyro670/PokeTextures/main/icon_version/64x64/icon_version_";
+            string title = SwitchConnection.GetTitleID(token).Result;
+            switch (title)
+            {
+                case ScarletID:
+                    {
+                        url = url + "SC.png";
+                        type = (int)GameSelected.Scarlet;
+                        break;
+                    }
+                case VioletID:
+                    {
+                        url = url + "VI.png";
+                        type = (int)GameSelected.Violet;
+                        break;
+                    }
+            }
+
+            OriginIcon.ImageLocation = url;
+            GameType = type;
+            var bg = "https://raw.githubusercontent.com/kwsch/PKHeX/master/PKHeX.Drawing.PokeSprite/Resources/img/Pokemon%20Sprite%20Overlays/starter.png";
+        }
+
+        private void WindowCapture_Click(object sender, EventArgs e)
+        {
+            Bitmap FormScreenShot = new(Width, Height);
+            Graphics G = Graphics.FromImage(FormScreenShot);
+            G.CopyFromScreen(Location, new Point(0, 0), Size);
+            Clipboard.SetImage(FormScreenShot);
+        }
+
+        private void InGameScreenshot_Click(object sender, EventArgs e)
+        {
+            var fn = "screenshot.jpg";
+            if (!SwitchConnection.Connected)
+            {
+                System.Media.SystemSounds.Beep.Play();
+                MessageBox.Show($"No device connected! In-Game Screenshot not possible!");
+                return;
+            }
+            var bytes = SwitchConnection.Screengrab(CancellationToken.None).Result;
+            File.WriteAllBytes(fn, bytes);
+            FileStream stream = new(fn, FileMode.Open);
+            var img = Image.FromStream(stream);
+            Clipboard.SetImage(img);
+            using (Form form = new Form())
+            {
+                Bitmap vimg = (Bitmap)img;
+
+                form.StartPosition = FormStartPosition.CenterScreen;
+
+                Bitmap original = vimg;
+                Bitmap resized = new Bitmap(original, new Size(original.Width / 2, original.Height / 2));
+
+                PictureBox pb = new PictureBox();
+                pb.Dock = DockStyle.Fill;
+                pb.Image = resized;
+                form.Size = resized.Size;
+
+                form.Controls.Add(pb);
+                form.ShowDialog();
+            }
+            stream.Dispose();
+            File.Delete(fn);
         }
     }
 }
