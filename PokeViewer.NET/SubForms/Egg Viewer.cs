@@ -200,7 +200,7 @@ namespace PokeViewer.NET.SubForms
 
                         var ivSpreadMatch = false;
                         var keepLooking = true;
-                        var anyIVCheck = false
+                        var anyIVCheck = false;
                         // HP
                         if (HPIVCheckbox.Checked && keepLooking)
                         {
