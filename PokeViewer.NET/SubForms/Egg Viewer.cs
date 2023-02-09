@@ -204,31 +204,31 @@ namespace PokeViewer.NET.SubForms
                         if (HPIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_HP == HPIVNumber.Value;
-                            keepLooking = false;
+                            keepLooking = ivSpreadMatch;
                         }
                         // Atk
                         if (AtkIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_ATK == AtkIVNumber.Value;
-                            keepLooking = false;
+                            keepLooking = ivSpreadMatch;
                         }
                         // Def
                         if (DefIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_DEF == DefIVNumber.Value;
-                            keepLooking = false;
+                            keepLooking = ivSpreadMatch;
                         }
                         // SpA
                         if (SpAIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_SPA == SpAIVNumber.Value;
-                            keepLooking = false;
+                            keepLooking = ivSpreadMatch;
                         }
                         // SpD
                         if (SpDIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_SPD == SpDIVNumber.Value;
-                            keepLooking = false;
+                            keepLooking = ivSpreadMatch;
                         }
                         // Spe
                         if (SpeIVCheckbox.Checked && keepLooking)
