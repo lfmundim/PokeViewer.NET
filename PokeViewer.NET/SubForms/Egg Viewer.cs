@@ -199,24 +199,42 @@ namespace PokeViewer.NET.SubForms
                         }
 
                         var ivSpreadMatch = false;
+                        var keepLooking = true;
                         // HP
-                        if (HPIVCheckbox.Checked)
+                        if (HPIVCheckbox.Checked && keepLooking)
+                        {
                             ivSpreadMatch = pk.IV_HP == HPIVNumber.Value;
+                            keepLooking = false;
+                        }
                         // Atk
-                        if (AtkIVCheckbox.Checked)
+                        if (AtkIVCheckbox.Checked && keepLooking)
+                        {
                             ivSpreadMatch = pk.IV_ATK == AtkIVNumber.Value;
+                            keepLooking = false;
+                        }
                         // Def
-                        if (DefIVCheckbox.Checked)
+                        if (DefIVCheckbox.Checked && keepLooking)
+                        {
                             ivSpreadMatch = pk.IV_DEF == DefIVNumber.Value;
+                            keepLooking = false;
+                        }
                         // SpA
-                        if (SpAIVCheckbox.Checked)
+                        if (SpAIVCheckbox.Checked && keepLooking)
+                        {
                             ivSpreadMatch = pk.IV_SPA == SpAIVNumber.Value;
+                            keepLooking = false;
+                        }
                         // SpD
-                        if (SpDIVCheckbox.Checked)
+                        if (SpDIVCheckbox.Checked && keepLooking)
+                        {
                             ivSpreadMatch = pk.IV_SPD == SpDIVNumber.Value;
+                            keepLooking = false;
+                        }
                         // Spe
-                        if (SpeIVCheckbox.Checked)
+                        if (SpeIVCheckbox.Checked && keepLooking)
+                        {
                             ivSpreadMatch = pk.IV_SPE == SpeIVNumber.Value;
+                        }
 
                         if (ivSpreadMatch)
                         {
