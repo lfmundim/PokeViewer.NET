@@ -200,43 +200,50 @@ namespace PokeViewer.NET.SubForms
 
                         var ivSpreadMatch = false;
                         var keepLooking = true;
+                        var anyIVCheck = false
                         // HP
                         if (HPIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_HP == HPIVNumber.Value;
                             keepLooking = ivSpreadMatch;
+                            anyIVCheck = true;
                         }
                         // Atk
                         if (AtkIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_ATK == AtkIVNumber.Value;
                             keepLooking = ivSpreadMatch;
+                            anyIVCheck = true;
                         }
                         // Def
                         if (DefIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_DEF == DefIVNumber.Value;
                             keepLooking = ivSpreadMatch;
+                            anyIVCheck = true;
                         }
                         // SpA
                         if (SpAIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_SPA == SpAIVNumber.Value;
                             keepLooking = ivSpreadMatch;
+                            anyIVCheck = true;
                         }
                         // SpD
                         if (SpDIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_SPD == SpDIVNumber.Value;
                             keepLooking = ivSpreadMatch;
+                            anyIVCheck = true;
                         }
                         // Spe
                         if (SpeIVCheckbox.Checked && keepLooking)
                         {
                             ivSpreadMatch = pk.IV_SPE == SpeIVNumber.Value;
+                            anyIVCheck = true;
                         }
 
-                        if (ivSpreadMatch)
+                        if (ivSpreadMatch && anyIVCheck)
                         {
                             // Found matching IV spread
                             await Click(HOME, 0_500, token).ConfigureAwait(false);
@@ -244,6 +251,30 @@ namespace PokeViewer.NET.SubForms
                             //WindowState = _WindowState;
                             //Activate();
                             MessageBox.Show("IV Match found!");
+                            return;
+                        }
+
+                        if(MixIVCheckbox.Checked)
+                        {
+                            var maxIVCount = pk.IVs.Count(iv => iv == 31);
+                            if  (maxIVCount >= int.Parse(MixIVDropdown.SelectedText))
+                            {
+                                await Click(HOME, 0_500, token).ConfigureAwait(false);
+                                SendNotifications(output, sprite);
+                                //WindowState = _WindowState;
+                                //Activate();
+                                MessageBox.Show("IV Match found!");
+                                return;
+                            }
+                        }
+
+                        if (((Nature)pk.Nature).ToString().Equals(NatureDropdown.SelectedText))
+                        {
+                            await Click(HOME, 0_500, token).ConfigureAwait(false);
+                            SendNotifications(output, sprite);
+                            //WindowState = _WindowState;
+                            //Activate();
+                            MessageBox.Show("Nature Match found!");
                             return;
                         }
 
