@@ -6,7 +6,6 @@ Planned features:
 * HA filter (post v1 release)
 * auto export `.pk9` on shiny for backup (on hold, exported eggs from basket are illegal - no met conditions)
 * Hystory and Statistics! (post v1 release)
-* Generic IV filter (5iv, 4iv, not a determined spread)
 * IV range filter (<5 instead of a specific number)
 
 -----
