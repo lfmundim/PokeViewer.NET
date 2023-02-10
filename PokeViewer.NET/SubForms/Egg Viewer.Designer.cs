@@ -78,10 +78,15 @@ namespace PokeViewer.NET.SubForms
             this.SpeIVNumber = new System.Windows.Forms.NumericUpDown();
             this.SpDIVNumber = new System.Windows.Forms.NumericUpDown();
             this.IVBox = new System.Windows.Forms.GroupBox();
+            this.MixIVDropdown = new System.Windows.Forms.ComboBox();
+            this.MixIVCheckbox = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.genderDropdown = new System.Windows.Forms.ComboBox();
             this.genderLabel = new System.Windows.Forms.Label();
             this.RarityBox = new System.Windows.Forms.GroupBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.NatureDropdown = new System.Windows.Forms.ComboBox();
+            this.NatureLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PokeSpriteBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BallBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumberOfFillings)).BeginInit();
@@ -91,6 +96,7 @@ namespace PokeViewer.NET.SubForms
             ((System.ComponentModel.ISupportInitialize)(this.DefIVNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpeIVNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpDIVNumber)).BeginInit();
+            this.IVBox.SuspendLayout();
             this.RarityBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -168,7 +174,7 @@ namespace PokeViewer.NET.SubForms
             // EatOnStart
             // 
             this.EatOnStart.AutoSize = true;
-            this.EatOnStart.Location = new System.Drawing.Point(183, 130);
+            this.EatOnStart.Location = new System.Drawing.Point(183, 147);
             this.EatOnStart.Name = "EatOnStart";
             this.EatOnStart.Size = new System.Drawing.Size(88, 19);
             this.EatOnStart.TabIndex = 13;
@@ -214,7 +220,7 @@ namespace PokeViewer.NET.SubForms
             // EatAgain
             // 
             this.EatAgain.AutoSize = true;
-            this.EatAgain.Location = new System.Drawing.Point(183, 152);
+            this.EatAgain.Location = new System.Drawing.Point(183, 169);
             this.EatAgain.Name = "EatAgain";
             this.EatAgain.Size = new System.Drawing.Size(76, 19);
             this.EatAgain.TabIndex = 18;
@@ -312,7 +318,7 @@ namespace PokeViewer.NET.SubForms
             // HoldIngredients
             // 
             this.HoldIngredients.AutoSize = true;
-            this.HoldIngredients.Location = new System.Drawing.Point(183, 174);
+            this.HoldIngredients.Location = new System.Drawing.Point(183, 191);
             this.HoldIngredients.Name = "HoldIngredients";
             this.HoldIngredients.Size = new System.Drawing.Size(92, 19);
             this.HoldIngredients.TabIndex = 32;
@@ -417,7 +423,7 @@ namespace PokeViewer.NET.SubForms
             // PingOnReset
             // 
             this.PingOnReset.AutoSize = true;
-            this.PingOnReset.Location = new System.Drawing.Point(182, 195);
+            this.PingOnReset.Location = new System.Drawing.Point(182, 212);
             this.PingOnReset.Name = "PingOnReset";
             this.PingOnReset.Size = new System.Drawing.Size(98, 19);
             this.PingOnReset.TabIndex = 44;
@@ -588,13 +594,53 @@ namespace PokeViewer.NET.SubForms
             // 
             // IVBox
             // 
+            this.IVBox.Controls.Add(this.MixIVDropdown);
+            this.IVBox.Controls.Add(this.MixIVCheckbox);
+            this.IVBox.Controls.Add(this.label2);
             this.IVBox.Location = new System.Drawing.Point(355, 6);
             this.IVBox.Name = "IVBox";
-            this.IVBox.Size = new System.Drawing.Size(109, 164);
+            this.IVBox.Size = new System.Drawing.Size(109, 208);
             this.IVBox.TabIndex = 63;
             this.IVBox.TabStop = false;
             this.IVBox.Text = "IVs";
             this.toolTip1.SetToolTip(this.IVBox, "Will stop only at pokémons matching a specific IV Spread");
+            // 
+            // MixIVDropdown
+            // 
+            this.MixIVDropdown.FormattingEnabled = true;
+            this.MixIVDropdown.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"});
+            this.MixIVDropdown.Location = new System.Drawing.Point(60, 166);
+            this.MixIVDropdown.MaxDropDownItems = 3;
+            this.MixIVDropdown.Name = "MixIVDropdown";
+            this.MixIVDropdown.Size = new System.Drawing.Size(35, 23);
+            this.MixIVDropdown.TabIndex = 67;
+            this.MixIVDropdown.Text = "1";
+            this.toolTip1.SetToolTip(this.MixIVDropdown, "Will only stop for shiny of a determined gender. Use Any for Genderless");
+            // 
+            // MixIVCheckbox
+            // 
+            this.MixIVCheckbox.AutoSize = true;
+            this.MixIVCheckbox.Location = new System.Drawing.Point(8, 170);
+            this.MixIVCheckbox.Name = "MixIVCheckbox";
+            this.MixIVCheckbox.Size = new System.Drawing.Size(46, 19);
+            this.MixIVCheckbox.TabIndex = 67;
+            this.MixIVCheckbox.Text = "Mix";
+            this.toolTip1.SetToolTip(this.MixIVCheckbox, "Will stop on any combination of this many Best IVs or higher");
+            this.MixIVCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(38, 152);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(23, 15);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "OR";
             // 
             // genderDropdown
             // 
@@ -631,11 +677,60 @@ namespace PokeViewer.NET.SubForms
             this.RarityBox.TabStop = false;
             this.RarityBox.Text = "Rarity";
             // 
+            // NatureDropdown
+            // 
+            this.NatureDropdown.FormattingEnabled = true;
+            this.NatureDropdown.Items.AddRange(new object[] {
+            "Any",
+            "Adamant",
+            "Bashful",
+            "Bold",
+            "Brave",
+            "Calm",
+            "Careful",
+            "Docile",
+            "Gentle",
+            "Hardy",
+            "Hasty",
+            "Impish",
+            "Jolly",
+            "Lax",
+            "Lonely",
+            "Mild",
+            "Modest",
+            "Naive",
+            "Naughty",
+            "Quiet",
+            "Quirky",
+            "Rash",
+            "Relaxed",
+            "Sassy",
+            "Serious",
+            "Timid"});
+            this.NatureDropdown.Location = new System.Drawing.Point(232, 109);
+            this.NatureDropdown.MaxDropDownItems = 3;
+            this.NatureDropdown.Name = "NatureDropdown";
+            this.NatureDropdown.Size = new System.Drawing.Size(94, 23);
+            this.NatureDropdown.TabIndex = 67;
+            this.NatureDropdown.Text = "Any";
+            this.toolTip1.SetToolTip(this.NatureDropdown, "Will only stop for shiny of a determined gender. Use Any for Genderless");
+            // 
+            // NatureLabel
+            // 
+            this.NatureLabel.AutoSize = true;
+            this.NatureLabel.Location = new System.Drawing.Point(183, 115);
+            this.NatureLabel.Name = "NatureLabel";
+            this.NatureLabel.Size = new System.Drawing.Size(43, 15);
+            this.NatureLabel.TabIndex = 68;
+            this.NatureLabel.Text = "Nature";
+            // 
             // Egg_Viewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(507, 396);
+            this.Controls.Add(this.NatureLabel);
+            this.Controls.Add(this.NatureDropdown);
             this.Controls.Add(this.SpeIVNumber);
             this.Controls.Add(this.SpDIVNumber);
             this.Controls.Add(this.SpAIVNumber);
@@ -696,6 +791,8 @@ namespace PokeViewer.NET.SubForms
             ((System.ComponentModel.ISupportInitialize)(this.DefIVNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpeIVNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpDIVNumber)).EndInit();
+            this.IVBox.ResumeLayout(false);
+            this.IVBox.PerformLayout();
             this.RarityBox.ResumeLayout(false);
             this.RarityBox.PerformLayout();
             this.ResumeLayout(false);
@@ -756,5 +853,10 @@ namespace PokeViewer.NET.SubForms
         private Label genderLabel;
         private GroupBox RarityBox;
         private ToolTip toolTip1;
+        private ComboBox MixIVDropdown;
+        private CheckBox MixIVCheckbox;
+        private Label label2;
+        private ComboBox NatureDropdown;
+        private Label NatureLabel;
     }
 }
