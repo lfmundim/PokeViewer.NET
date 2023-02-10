@@ -1,6 +1,6 @@
 This is a trimmed down version of zyro670/PokeViewer.NET to feature **only** egg checking, as it is the only feature I was interested in. Any other functionality, including BDSP/SWSH/LPE compatibility was trimmed out. **Only compatible with SV**
 
-<img width="319" alt="image" src="https://user-images.githubusercontent.com/15164001/215330433-b6b1c0bc-9ad2-4a75-bbde-7396f1f12db8.png">
+<img width="397" alt="image" src="https://user-images.githubusercontent.com/15164001/217986176-2c0228fe-6b8a-4e0b-8a54-811ec9aafc5a.png">
 
 Planned features:
 * HA filter (post v1 release)
