@@ -1,4 +1,4 @@
-[![](https://dcbadge.vercel.app/api/server/INVITEID)](https://discord.gg/gmdVsB9Gj4)
+[![](https://dcbadge.vercel.app/api/server/gmdVsB9Gj4)](https://discord.gg/gmdVsB9Gj4)
 
 This is a trimmed down version of zyro670/PokeViewer.NET to feature **only** egg checking, as it is the only feature I was interested in. Any other functionality, including BDSP/SWSH/LPE compatibility was trimmed out. **Only compatible with SV**
 
