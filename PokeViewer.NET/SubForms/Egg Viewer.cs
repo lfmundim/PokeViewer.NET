@@ -48,10 +48,10 @@ namespace PokeViewer.NET.SubForms
         private int eggcount = 0;
         private int sandwichcount = 0;
         private int shinycount = 0;
-        private readonly uint EggData = 0x04386040;
-        private readonly uint PicnicMenu = 0x04416020;
+        private readonly uint EggData = 0x044AAE00;
+        private readonly uint PicnicMenu = 0x0453B020;
         private readonly byte[] BlankVal = { 0x01 };
-        public IReadOnlyList<long> OverworldPointer { get; } = new long[] { 0x43A7848, 0x348, 0x10, 0xD8, 0x28 };
+        public IReadOnlyList<long> OverworldPointer { get; } = new long[] { 0x44CCAE8, 0x348, 0x10, 0xD8, 0x28 };
         private ulong OverworldOffset;
 
         public string DumpFolder { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
