@@ -257,7 +257,8 @@ namespace PokeViewer.NET.SubForms
                         if(MixIVCheckbox.Checked)
                         {
                             var maxIVCount = pk.IVs.Count(iv => iv == 31);
-                            if  (maxIVCount >= int.Parse(MixIVDropdown.SelectedText))
+                            var mixIVValue = this.GetSafely(() => MixIVDropdown.Text);
+                            if  (maxIVCount >= int.Parse(mixIVValue))
                             {
                                 await Click(HOME, 0_500, token).ConfigureAwait(false);
                                 SendNotifications(output, sprite);
@@ -268,7 +269,7 @@ namespace PokeViewer.NET.SubForms
                             }
                         }
 
-                        if (((Nature)pk.Nature).ToString().Equals(NatureDropdown.SelectedText))
+                        if (((Nature)pk.Nature).ToString().Equals(this.GetSafely(() => NatureDropdown.Text)))
                         {
                             await Click(HOME, 0_500, token).ConfigureAwait(false);
                             SendNotifications(output, sprite);
