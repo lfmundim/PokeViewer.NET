@@ -1,4 +1,5 @@
 ﻿using NLog;
+using PokeViewer.NET.Properties;
 using PokeViewer.NET.SubForms;
 using SysBot.Base;
 using System.Net.Sockets;
@@ -36,7 +37,9 @@ namespace PokeViewer.NET
         private void PokeViewerForm_Load(object sender, EventArgs e)
         {
             _logger.Debug("Loading MainViewer Form");
-            SwitchIP.Text = Properties.Settings.Default.SwitchIP;
+            SwitchIP.Text = Settings.Default.SwitchIP;
+            WebHookText.Text = Settings.Default.WebHook;
+            UserDiscordIDText.Text = Settings.Default.UserDiscordID;
             LoadOriginDefault(sender, e);
         }
 
@@ -71,6 +74,7 @@ namespace PokeViewer.NET
                     InGameScreenshot.Visible = true;
                     DayCareView.Visible = true;
                     outbreakCrawler.Visible = true;
+                    //WebHookText.Visible = true
                     Window_Loaded();
                 }
                 catch (SocketException err)
@@ -95,7 +99,7 @@ namespace PokeViewer.NET
                 this.Close();
                 Application.Restart();
             }
-            
+
         }
 
         private void Window_Loaded()
@@ -122,7 +126,7 @@ namespace PokeViewer.NET
                     }
             }
 
-            OriginIcon.ImageLocation = url;            
+            OriginIcon.ImageLocation = url;
             GameType = type;
         }
 
@@ -183,6 +187,18 @@ namespace PokeViewer.NET
             _logger.Debug("CLicked OutbreakCrawler");
             using OutbreakView Form = new();
             Form.ShowDialog();
+        }
+
+        private void WebHookText_TextChanged(object sender, EventArgs e)
+        {
+            Settings.Default.WebHook = WebHookText.Text;
+            Settings.Default.Save();
+        }
+
+        private void UserDiscordIDText_TextChanged(object sender, EventArgs e)
+        {
+            Settings.Default.UserDiscordID = UserDiscordIDText.Text;
+            Settings.Default.Save();
         }
     }
 }

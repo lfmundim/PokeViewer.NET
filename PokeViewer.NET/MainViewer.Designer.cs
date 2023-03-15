@@ -38,6 +38,10 @@ namespace PokeViewer.NET
             this.DayCareView = new System.Windows.Forms.Button();
             this.InGameScreenshot = new System.Windows.Forms.Button();
             this.outbreakCrawler = new System.Windows.Forms.Button();
+            this.DiscordUserID = new System.Windows.Forms.Label();
+            this.WebHookURL = new System.Windows.Forms.Label();
+            this.UserDiscordIDText = new System.Windows.Forms.TextBox();
+            this.WebHookText = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.OriginIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -114,12 +118,51 @@ namespace PokeViewer.NET
             this.outbreakCrawler.Visible = false;
             this.outbreakCrawler.Click += new System.EventHandler(this.OutbreakCrawler_Click);
             // 
+            // DiscordUserID
+            // 
+            this.DiscordUserID.AutoSize = true;
+            this.DiscordUserID.Location = new System.Drawing.Point(292, 146);
+            this.DiscordUserID.Name = "DiscordUserID";
+            this.DiscordUserID.Size = new System.Drawing.Size(87, 15);
+            this.DiscordUserID.TabIndex = 46;
+            this.DiscordUserID.Text = "Discord User ID";
+            // 
+            // WebHookURL
+            // 
+            this.WebHookURL.AutoSize = true;
+            this.WebHookURL.Location = new System.Drawing.Point(292, 118);
+            this.WebHookURL.Name = "WebHookURL";
+            this.WebHookURL.Size = new System.Drawing.Size(101, 15);
+            this.WebHookURL.TabIndex = 45;
+            this.WebHookURL.Text = "Discord Webhook";
+            // 
+            // UserDiscordIDText
+            // 
+            this.UserDiscordIDText.Location = new System.Drawing.Point(19, 139);
+            this.UserDiscordIDText.Name = "UserDiscordIDText";
+            this.UserDiscordIDText.Size = new System.Drawing.Size(267, 23);
+            this.UserDiscordIDText.TabIndex = 44;
+            this.UserDiscordIDText.TextChanged += new System.EventHandler(this.UserDiscordIDText_TextChanged);
+            // 
+            // WebHookText
+            // 
+            this.WebHookText.Location = new System.Drawing.Point(19, 110);
+            this.WebHookText.Name = "WebHookText";
+            this.WebHookText.Size = new System.Drawing.Size(267, 23);
+            this.WebHookText.TabIndex = 43;
+            this.WebHookText.UseSystemPasswordChar = true;
+            this.WebHookText.TextChanged += new System.EventHandler(this.WebHookText_TextChanged);
+            // 
             // MainViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(405, 106);
+            this.ClientSize = new System.Drawing.Size(405, 172);
+            this.Controls.Add(this.DiscordUserID);
+            this.Controls.Add(this.WebHookURL);
+            this.Controls.Add(this.UserDiscordIDText);
+            this.Controls.Add(this.WebHookText);
             this.Controls.Add(this.outbreakCrawler);
             this.Controls.Add(this.InGameScreenshot);
             this.Controls.Add(this.DayCareView);
@@ -148,5 +191,9 @@ namespace PokeViewer.NET
         private Button DayCareView;
         private Button InGameScreenshot;
         private Button outbreakCrawler;
+        private Label DiscordUserID;
+        private Label WebHookURL;
+        private TextBox UserDiscordIDText;
+        private TextBox WebHookText;
     }
 }

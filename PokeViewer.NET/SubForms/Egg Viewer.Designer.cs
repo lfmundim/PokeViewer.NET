@@ -58,11 +58,7 @@ namespace PokeViewer.NET.SubForms
             this.label1 = new System.Windows.Forms.Label();
             this.HoldTimeToFillings = new System.Windows.Forms.Label();
             this.FillingHoldTime = new System.Windows.Forms.TextBox();
-            this.WebHookText = new System.Windows.Forms.TextBox();
             this.SaveValues = new System.Windows.Forms.Button();
-            this.UserDiscordIDText = new System.Windows.Forms.TextBox();
-            this.WebHookURL = new System.Windows.Forms.Label();
-            this.DiscordUserID = new System.Windows.Forms.Label();
             this.ScreenshotEggView = new System.Windows.Forms.Button();
             this.PingOnReset = new System.Windows.Forms.CheckBox();
             this.SpeIVCheckbox = new System.Windows.Forms.CheckBox();
@@ -367,14 +363,6 @@ namespace PokeViewer.NET.SubForms
             this.FillingHoldTime.Size = new System.Drawing.Size(33, 23);
             this.FillingHoldTime.TabIndex = 36;
             // 
-            // WebHookText
-            // 
-            this.WebHookText.Location = new System.Drawing.Point(127, 327);
-            this.WebHookText.Name = "WebHookText";
-            this.WebHookText.Size = new System.Drawing.Size(111, 23);
-            this.WebHookText.TabIndex = 37;
-            this.WebHookText.UseSystemPasswordChar = true;
-            // 
             // SaveValues
             // 
             this.SaveValues.Location = new System.Drawing.Point(12, 347);
@@ -384,31 +372,6 @@ namespace PokeViewer.NET.SubForms
             this.SaveValues.Text = "Save Fields";
             this.SaveValues.UseVisualStyleBackColor = true;
             this.SaveValues.Click += new System.EventHandler(this.SaveValues_Click);
-            // 
-            // UserDiscordIDText
-            // 
-            this.UserDiscordIDText.Location = new System.Drawing.Point(127, 354);
-            this.UserDiscordIDText.Name = "UserDiscordIDText";
-            this.UserDiscordIDText.Size = new System.Drawing.Size(111, 23);
-            this.UserDiscordIDText.TabIndex = 40;
-            // 
-            // WebHookURL
-            // 
-            this.WebHookURL.AutoSize = true;
-            this.WebHookURL.Location = new System.Drawing.Point(244, 330);
-            this.WebHookURL.Name = "WebHookURL";
-            this.WebHookURL.Size = new System.Drawing.Size(101, 15);
-            this.WebHookURL.TabIndex = 41;
-            this.WebHookURL.Text = "Discord Webhook";
-            // 
-            // DiscordUserID
-            // 
-            this.DiscordUserID.AutoSize = true;
-            this.DiscordUserID.Location = new System.Drawing.Point(244, 356);
-            this.DiscordUserID.Name = "DiscordUserID";
-            this.DiscordUserID.Size = new System.Drawing.Size(87, 15);
-            this.DiscordUserID.TabIndex = 42;
-            this.DiscordUserID.Text = "Discord User ID";
             // 
             // ScreenshotEggView
             // 
@@ -745,11 +708,7 @@ namespace PokeViewer.NET.SubForms
             this.Controls.Add(this.HPIVCheckbox);
             this.Controls.Add(this.PingOnReset);
             this.Controls.Add(this.ScreenshotEggView);
-            this.Controls.Add(this.DiscordUserID);
-            this.Controls.Add(this.WebHookURL);
-            this.Controls.Add(this.UserDiscordIDText);
             this.Controls.Add(this.SaveValues);
-            this.Controls.Add(this.WebHookText);
             this.Controls.Add(this.FillingHoldTime);
             this.Controls.Add(this.HoldTimeToFillings);
             this.Controls.Add(this.label1);
@@ -829,11 +788,7 @@ namespace PokeViewer.NET.SubForms
         private Label label1;
         private Label HoldTimeToFillings;
         private TextBox FillingHoldTime;
-        private TextBox WebHookText;
         private Button SaveValues;
-        private TextBox UserDiscordIDText;
-        private Label WebHookURL;
-        private Label DiscordUserID;
         private Button ScreenshotEggView;
         private CheckBox PingOnReset;
         private CheckBox SpeIVCheckbox;

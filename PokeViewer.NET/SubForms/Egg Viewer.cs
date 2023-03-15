@@ -41,8 +41,6 @@ namespace PokeViewer.NET.SubForms
             Item3Value.Text = Settings.Default.Item3;
             DUPItem3.Checked = Settings.Default.Item3DUP;
             FillingHoldTime.Text = Settings.Default.HoldTime;
-            WebHookText.Text = Settings.Default.WebHook;
-            UserDiscordIDText.Text = Settings.Default.UserDiscordID;
         }
 
         private int eggcount = 0;
@@ -59,8 +57,6 @@ namespace PokeViewer.NET.SubForms
         private async void button1_Click(object sender, EventArgs e)
         {
             _logger.Debug($"Fetch clicked. Current status: StopOnShiny: {StopOnShiny.Checked}, 3 Segment: {CheckBoxOf3.Checked}, Eat on start: {EatOnStart.Checked}, Eat again: {EatAgain}");
-            if (!string.IsNullOrEmpty(Settings.Default.WebHook))
-                WebHookText.Text = Settings.Default.WebHook;
 
             if (FetchButton.Enabled == true)
                 DisableOptions();
@@ -562,7 +558,7 @@ namespace PokeViewer.NET.SubForms
         {
             if (string.IsNullOrEmpty(results))
                 return;
-            DiscordWebhooks = WebHookText.Text.Split(',');
+            DiscordWebhooks = Settings.Default.WebHook.Split(',');
             if (DiscordWebhooks == null)
                 return;
             var webhook = GeneratePingWebhook(results, thumbnail);
@@ -575,7 +571,7 @@ namespace PokeViewer.NET.SubForms
         {
             if (string.IsNullOrEmpty(results))
                 return;
-            DiscordWebhooks = WebHookText.Text.Split(',');
+            DiscordWebhooks = Settings.Default.WebHook.Split(',');
             if (DiscordWebhooks == null)
                 return;
             var webhook = GenerateFoundWebhook(results, thumbnail);
@@ -637,8 +633,6 @@ namespace PokeViewer.NET.SubForms
 
         private void SaveValues_Click(object sender, EventArgs e)
         {
-            Settings.Default.WebHook = WebHookText.Text;
-            Settings.Default.UserDiscordID = UserDiscordIDText.Text;
             Settings.Default.StopOnShiny = StopOnShiny.Checked;
             Settings.Default.CheckBoxOf3 = CheckBoxOf3.Checked;
             Settings.Default.EatOnStart = EatOnStart.Checked;

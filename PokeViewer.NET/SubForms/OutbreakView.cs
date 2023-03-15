@@ -131,19 +131,21 @@ namespace PokeViewer.NET.SubForms
             OutbreakSearch.Enabled = false;
             while (!token.IsCancellationRequested)
             {
-                var validOutbreaks = await ReadEncryptedBlockByte(Blocks.KMassOutbreakTotalEnabled, token).ConfigureAwait(false);
-                var Outbreaktotal = Convert.ToInt32(validOutbreaks);
-
                 if (HardStopOutbreak.Checked)
                 {
                     MessageBox.Show("HardStop enabled, ending task. Uncheck if you wish to scan until match is found.");
                     break;
                 }
 
-                for (int i = 0; i < list.Length; i++)                
+                for (int i = 0; i < list.Length; i++)
+                {
                     list[i].Text = string.Empty;
+                    spritelist[i].Image = null;
+                }           
 
                 await SVSaveGameOverworld(token).ConfigureAwait(false);
+                var validOutbreaks = await ReadEncryptedBlockByte(Blocks.KMassOutbreakTotalEnabled, token).ConfigureAwait(false);
+                var Outbreaktotal = Convert.ToInt32(validOutbreaks);
                 var block = Blocks.KOutbreakSpecies1;
                 var koblock = Blocks.KMassOutbreakKO1;
                 var totalblock = Blocks.KMassOutbreak01TotalSpawns;
@@ -194,7 +196,9 @@ namespace PokeViewer.NET.SubForms
                     bool huntedspecies = monlist.Contains($"{mons[i]}");
                     if (huntedspecies && monlist.Length != 0)
                     {
-                        MessageBox.Show($"{mons[i]} outbreak found!");
+                        var message = $"{mons[i]} outbreak found!";
+                        SendNotifications(message);
+                        MessageBox.Show(message);
                         SystemSounds.Asterisk.Play();
                         {
                             OutbreakScan.Enabled = true;
