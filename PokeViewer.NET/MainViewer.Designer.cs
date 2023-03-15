@@ -37,15 +37,15 @@ namespace PokeViewer.NET
             this.WindowCapture = new System.Windows.Forms.Button();
             this.DayCareView = new System.Windows.Forms.Button();
             this.InGameScreenshot = new System.Windows.Forms.Button();
+            this.outbreakCrawler = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.OriginIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // Connect
             // 
-            this.Connect.Location = new System.Drawing.Point(27, 53);
-            this.Connect.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Connect.Location = new System.Drawing.Point(19, 32);
             this.Connect.Name = "Connect";
-            this.Connect.Size = new System.Drawing.Size(107, 42);
+            this.Connect.Size = new System.Drawing.Size(75, 25);
             this.Connect.TabIndex = 0;
             this.Connect.Text = "Connect";
             this.Connect.UseVisualStyleBackColor = true;
@@ -53,21 +53,19 @@ namespace PokeViewer.NET
             // 
             // SwitchIP
             // 
-            this.SwitchIP.Location = new System.Drawing.Point(27, 10);
-            this.SwitchIP.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.SwitchIP.Location = new System.Drawing.Point(19, 6);
             this.SwitchIP.Name = "SwitchIP";
-            this.SwitchIP.Size = new System.Drawing.Size(181, 31);
+            this.SwitchIP.Size = new System.Drawing.Size(128, 23);
             this.SwitchIP.TabIndex = 2;
+            this.SwitchIP.Text = "192.168.0.0";
             this.SwitchIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.SwitchIP.Text = Settings.Default.SwitchIP;
             this.SwitchIP.TextChanged += new System.EventHandler(this.CheckForIP);
             // 
             // OriginIcon
             // 
             this.OriginIcon.ImageLocation = "https://raw.githubusercontent.com/zyro670/PokeTextures/main/OriginMarks/icon_gene" +
     "ration_00%5Esb.png";
-            this.OriginIcon.Location = new System.Drawing.Point(241, 52);
-            this.OriginIcon.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.OriginIcon.Location = new System.Drawing.Point(169, 31);
             this.OriginIcon.Name = "OriginIcon";
             this.OriginIcon.Size = new System.Drawing.Size(64, 64);
             this.OriginIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -77,20 +75,18 @@ namespace PokeViewer.NET
             // WindowCapture
             // 
             this.WindowCapture.Image = ((System.Drawing.Image)(resources.GetObject("WindowCapture.Image")));
-            this.WindowCapture.Location = new System.Drawing.Point(156, 55);
-            this.WindowCapture.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.WindowCapture.Location = new System.Drawing.Point(109, 33);
             this.WindowCapture.Name = "WindowCapture";
-            this.WindowCapture.Size = new System.Drawing.Size(53, 42);
+            this.WindowCapture.Size = new System.Drawing.Size(37, 25);
             this.WindowCapture.TabIndex = 20;
             this.WindowCapture.UseVisualStyleBackColor = true;
             this.WindowCapture.Click += new System.EventHandler(this.CaptureWindow_Click);
             // 
             // DayCareView
             // 
-            this.DayCareView.Location = new System.Drawing.Point(451, 7);
-            this.DayCareView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.DayCareView.Location = new System.Drawing.Point(316, 4);
             this.DayCareView.Name = "DayCareView";
-            this.DayCareView.Size = new System.Drawing.Size(107, 42);
+            this.DayCareView.Size = new System.Drawing.Size(75, 25);
             this.DayCareView.TabIndex = 27;
             this.DayCareView.Text = "Egg View";
             this.DayCareView.UseVisualStyleBackColor = true;
@@ -100,20 +96,31 @@ namespace PokeViewer.NET
             // InGameScreenshot
             // 
             this.InGameScreenshot.Image = ((System.Drawing.Image)(resources.GetObject("InGameScreenshot.Image")));
-            this.InGameScreenshot.Location = new System.Drawing.Point(156, 107);
-            this.InGameScreenshot.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.InGameScreenshot.Location = new System.Drawing.Point(109, 64);
             this.InGameScreenshot.Name = "InGameScreenshot";
-            this.InGameScreenshot.Size = new System.Drawing.Size(53, 42);
+            this.InGameScreenshot.Size = new System.Drawing.Size(37, 25);
             this.InGameScreenshot.TabIndex = 30;
             this.InGameScreenshot.UseVisualStyleBackColor = true;
             this.InGameScreenshot.Click += new System.EventHandler(this.InGameScreenshot_Click);
             // 
+            // outbreakCrawler
+            // 
+            this.outbreakCrawler.Location = new System.Drawing.Point(316, 35);
+            this.outbreakCrawler.Name = "outbreakCrawler";
+            this.outbreakCrawler.Size = new System.Drawing.Size(75, 25);
+            this.outbreakCrawler.TabIndex = 31;
+            this.outbreakCrawler.Text = "Outbreak";
+            this.outbreakCrawler.UseVisualStyleBackColor = true;
+            this.outbreakCrawler.Visible = false;
+            this.outbreakCrawler.Click += new System.EventHandler(this.OutbreakCrawler_Click);
+            // 
             // MainViewer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(579, 176);
+            this.ClientSize = new System.Drawing.Size(405, 106);
+            this.Controls.Add(this.outbreakCrawler);
             this.Controls.Add(this.InGameScreenshot);
             this.Controls.Add(this.DayCareView);
             this.Controls.Add(this.WindowCapture);
@@ -121,7 +128,6 @@ namespace PokeViewer.NET
             this.Controls.Add(this.SwitchIP);
             this.Controls.Add(this.Connect);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.Name = "MainViewer";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -141,5 +147,6 @@ namespace PokeViewer.NET
         private Button WindowCapture;
         private Button DayCareView;
         private Button InGameScreenshot;
+        private Button outbreakCrawler;
     }
 }

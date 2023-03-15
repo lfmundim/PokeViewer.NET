@@ -70,6 +70,7 @@ namespace PokeViewer.NET
                     SwitchIP.Enabled = false;
                     InGameScreenshot.Visible = true;
                     DayCareView.Visible = true;
+                    outbreakCrawler.Visible = true;
                     Window_Loaded();
                 }
                 catch (SocketException err)
@@ -87,6 +88,7 @@ namespace PokeViewer.NET
                 SwitchIP.Enabled = true;
                 InGameScreenshot.Visible = false;
                 DayCareView.Visible = false;
+                outbreakCrawler.Visible = false;
                 string url = "https://raw.githubusercontent.com/zyro670/PokeTextures/main/OriginMarks/icon_generation_00%5Esb.png";
                 OriginIcon.ImageLocation = url;
                 SwitchConnection.Reset();
@@ -174,6 +176,13 @@ namespace PokeViewer.NET
             _logger.Debug("Clicked EggViewer");
             using Egg_Viewer WideForm = new();
             WideForm.ShowDialog();
+        }
+
+        private void OutbreakCrawler_Click(object sender, EventArgs e)
+        {
+            _logger.Debug("CLicked OutbreakCrawler");
+            using OutbreakView Form = new();
+            Form.ShowDialog();
         }
     }
 }
